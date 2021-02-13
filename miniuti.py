@@ -3,7 +3,7 @@
 DEFAULT_LOGFILE="local.log"
 DEFAULT_VERBOSELEVEL=2
 DEFAULT_SHOWTHRESHOLD=False
-DEFAULT_WITHTIMEINFO=False
+DEFAULT_WITHTIMEINFO=True
 DEFAULT_DATETIMESEPARATOR=""
 DEFAULT_BIGFILE_READ_CHUNKSIZE=100000
 
@@ -13,16 +13,6 @@ from datetime import datetime
 
 
 # ================================= IMPLEMENTATION =================================
-
-
-def file_diriterate(dirpath,callbackfun,filecontentaslist=False): # Iterates in all files inside a directory and for each file opens it and calls a callback function to process it. The callback function must accept 4 arguments: filecounter, filnam, filecontent and filecontentaslist
-	cc=0
-	for lfilnam in os.listdir(dirpath):
-		cc+=1
-		filpath=dirpath+"/"+lfilnam
-		lfilecontent=file_readfilesafe(filpath,aslist=False)
-		callbackfun(filecounter=cc,filnam=lfilnam,filecontent=lfilecontent,filecontentaslist=filecontentaslist)
-
 
 
 def file_addneededslash2path(path):
@@ -71,6 +61,14 @@ def file_writefilesafe(cffilenam,filecontent,overw=False):
 		fil.write(filecontent)
 		fil.close
 	return hwritten
+
+def file_diriterate(dirpath,callbackfun,filecontentaslist=False): # Iterates in all files inside a directory and for each file opens it and calls a callback function to process it. The callback function must accept 4 arguments: filecounter, filnam, filecontent and filecontentaslist
+	cc=0
+	for lfilnam in os.listdir(dirpath):
+		cc+=1
+		filpath=dirpath+"/"+lfilnam
+		lfilecontent=file_readfilesafe(filpath,aslist=False)
+		callbackfun(filecounter=cc,filnam=lfilnam,filecontent=lfilecontent,filecontentaslist=filecontentaslist)
 
 
 def file_append2file(hfilenam,hfilecontent,backupfirst=False): # The updated file gets written in an (hopefully) atomic operation. If requested (default off) a backup copy of the non-yet-updated file is made.
